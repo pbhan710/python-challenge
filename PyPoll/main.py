@@ -1,9 +1,10 @@
 import os, csv  # Import dependencies.
 
-# Access and open 'election_data.csv'.
+# Direct to and open 'election_data.csv'.
 csv_file_path = os.path.join('Resources', 'election_data.csv')
 with open(csv_file_path, mode='r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
+
     # Obtain header row and indexes of needed columns.
     header = next(csv_reader)
     candidate_index = header.index('Candidate')
@@ -11,10 +12,10 @@ with open(csv_file_path, mode='r') as csv_file:
     # Initialize the Candidates Dictionary ("candidate_dict"): Track each candidate by total number of votes.
     candidate_dict = {} 
 
-    # Loop through each row in 'election_data.csv'.
+    # Loop through each row in 'election_data.csv', excluding header row.
     for row in csv_reader:
 
-        # Obtain candidate name.
+        # Store candidate name.
         row_candidate = row[candidate_index]
 
         # Check if candidate is in the Candidates Dictionary.
@@ -26,7 +27,7 @@ with open(csv_file_path, mode='r') as csv_file:
     # Calculate total number of votes.
     total_votes = sum(candidate_dict.values())
 
-    # Set up initial Election Results output.
+    # Set up initial Election Results in list.
     election_results = [    
         "Election Results",
         "-------------------------",
@@ -34,11 +35,11 @@ with open(csv_file_path, mode='r') as csv_file:
         "-------------------------"
     ]
 
-    # Calculate each candidate's percentage of votes won, and store to the Election Results list.
+    # Calculate each candidate's percentage of votes won, and store to the Election Results list in desired output.
     for candidate in candidate_dict:
         election_results.append(f"{candidate}: {'{0:.3%}'.format(candidate_dict[candidate] / total_votes)} ({candidate_dict[candidate]})")
 
-    # Determine winner, and add to the Election Results.
+    # Determine winner, and add to the Election Results in desired output.
     winner = max(candidate_dict, key=candidate_dict.get)
     election_results.extend([
         "-------------------------",
@@ -47,10 +48,10 @@ with open(csv_file_path, mode='r') as csv_file:
     ])
 
     # Print results to terminal.
-    for item in election_results:
-        print(item)
+    for line in election_results:
+        print(line)
 
-    # Print results to 'PyPoll Analysis.txt'.
+    # Print results to 'PyPoll_Analysis.txt'.
     txt_file_path = os.path.join('Analysis', 'PyPoll_Analysis.txt')
     with open(txt_file_path, mode='w') as txt_file:
-        txt_file.write('\n'.join(election_results))
+        txt_file.write('\n'.join(election_results)) # Write each line to text file, separating each item by a new line.
